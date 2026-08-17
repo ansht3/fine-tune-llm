@@ -1,20 +1,15 @@
-# Fine-Tune-LLM (End-to-End)
+# Fine-Tune-LLM (Gemma 4B End-to-End)
 
-This repository contains a fully original, end-to-end example for fine-tuning a small **open-source GPT-2 style language model**.
-
-To keep the workflow reproducible in restricted environments, the notebook trains:
-
-- a local tokenizer from scratch
-- a tiny GPT-2 architecture from scratch
-- then fine-tunes it on a custom instruction dataset
+This repository provides an original end-to-end starter for fine-tuning a **Gemma 4B-class model** with LoRA.
 
 ## What is included
 
-- `notebooks/fine_tune_tiny_gpt2.ipynb` — complete offline fine-tuning notebook
-- `Fine_Tuning_LLM_Presentation.md` — human-style presentation notes/slides
-- `requirements.txt` — Python dependencies
+- `/home/runner/work/fine-tune-llm/fine-tune-llm/fine_tune_gemma_4b.py` — standalone Python fine-tuning script for `google/gemma-3-4b-it`
+- `/home/runner/work/fine-tune-llm/fine-tune-llm/notebooks/fine_tune_gemma_4b.ipynb` — notebook version of the workflow
+- `/home/runner/work/fine-tune-llm/fine-tune-llm/Fine_Tuning_LLM_Presentation.pptx` — PowerPoint presentation
+- `/home/runner/work/fine-tune-llm/fine-tune-llm/requirements.txt` — dependencies
 
-## Quick start
+## Environment setup
 
 ```bash
 python -m venv .venv
@@ -23,32 +18,27 @@ pip install --upgrade pip
 pip install -r requirements.txt
 ```
 
-## Run the notebook
+## Fine-tune from Python script
+
+```bash
+export HF_TOKEN=<your_huggingface_token>
+python fine_tune_gemma_4b.py --epochs 1 --batch-size 1 --output-dir outputs/gemma-3-4b-lora
+```
+
+## Run notebook
 
 ```bash
 jupyter notebook
 ```
 
-Open `notebooks/fine_tune_tiny_gpt2.ipynb` and run all cells.
-
-## Notebook workflow
-
-1. Build a small instruction/response dataset
-2. Train a WordLevel tokenizer locally (offline)
-3. Tokenize train/eval splits
-4. Initialize a tiny GPT-2 model with `GPT2Config`
-5. Fine-tune with Hugging Face `Trainer`
-6. Save artifacts and run a generation sanity check
-
-## Validation performed
-
-The notebook itself was executed end-to-end using:
-
-```bash
-jupyter nbconvert --to notebook --execute --inplace notebooks/fine_tune_tiny_gpt2.ipynb
-```
+Open `/home/runner/work/fine-tune-llm/fine-tune-llm/notebooks/fine_tune_gemma_4b.ipynb`.
 
 ## Notes
 
-- This is intentionally compact for fast local experimentation.
-- For stronger performance, scale up dataset quality/size and tune hyperparameters.
+- Full fine-tuning requires model access permissions for `google/gemma-3-4b-it` and sufficient GPU memory.
+- For quick validation of repository setup without model download, run:
+
+```bash
+python fine_tune_gemma_4b.py --dry-run
+jupyter nbconvert --to notebook --execute --inplace notebooks/fine_tune_gemma_4b.ipynb
+```
